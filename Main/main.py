@@ -1,7 +1,10 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtGui import QIntValidator
 from PyQt5 import uic,QtWidgets
 import sys, os
 from sub_main import Main
+
+
 
 upload_state = False
 path_state = False
@@ -15,9 +18,13 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Data Duplicated Remover") 
         
+        
+        self.le_unique.setValidator(QIntValidator())
         self.btn_upload.clicked.connect(self.getFile)
         self.btn_path_selection.clicked.connect(self.getDir)
         self.btn_ok.clicked.connect(self.clicked_ok)
+        
+        
         
         self.show()
 
@@ -39,13 +46,15 @@ class MainWindow(QMainWindow):
 
     def clicked_ok(self):
         if (self.label_upload.text() and self.label_path_selection.text()) == '':
-            print("No file")
+            print("No file selected")
+            
+            
         
         else:
             upload_path = self.label_upload.text()
             selected_path = self.label_path_selection.text()
             
-            paths = Main(upload_path, selected_path)
+            paths = Main(upload_path, selected_path, self.le_unique.text())
             print(paths.dups_remover())
             
 

@@ -2,9 +2,10 @@ import csv
 import pandas as pd
 
 class Main:
-    def __init__(self, csv_path, save_path):
+    def __init__(self, csv_path, save_path, column_index):
         self.csv_path = csv_path
         self.save_path = save_path  
+        self.column_index = column_index
 
     def __str__(self):
         return f"{self.csv_path}\n{self.save_path}"
@@ -23,7 +24,7 @@ class Main:
             ncol.append(n)
         
         df = pd.read_csv(self.csv_path, encoding='latin-1', header=None,skiprows = lambda x: x not in nrow, usecols=ncol, dtype='unicode')
-        df.drop_duplicates(subset=10,keep='last', inplace=True)
+        df.drop_duplicates(subset=int(self.column_index)-1,keep='last', inplace=True)
         
         
         df.to_csv(self.save_path, index=False, header=False)
