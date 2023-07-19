@@ -1,15 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt5.QtGui import QIntValidator
-from PyQt5.QtCore import Qt
 from PyQt5 import uic, QtWidgets
-import sys, os, time
+from PyQt5.QtCore import Qt
 from sub_main import Main
-
-
-
-
-
-
+import sys, os, time
 
 upload_state = False
 path_state = False
@@ -59,15 +53,25 @@ class MainWindow(QMainWindow):
             self.message_handling(message)
         
         else:
-            # QApplication.setOverrideCursor(Qt.WaitCursor)
-            # time.sleep(3)
-            # QApplication.restoreOverrideCursor()
             upload_path = self.label_upload.text()
             selected_path = self.label_path_selection.text()
             
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            time.sleep(2)
             paths = Main(upload_path, selected_path, self.le_unique.text())
-            print(paths.dups_remover())
+            paths.dups_remover()
+            QApplication.restoreOverrideCursor()
             
+            msg_title = "Program Messege"
+            msg_text = "Successfully removed duplicated data."
+            msg = QMessageBox.information(self, msg_title, msg_text, QMessageBox.Ok)
+            
+            if msg == QMessageBox.Ok:
+                self.le_unique.setText("")
+                self.label_upload.setText("")
+                self.label_path_selection.setText("")
+
+
     def message_handling(self, text):
         self.messagebox = QMessageBox()
         self.messagebox.setText(text)
@@ -75,6 +79,7 @@ class MainWindow(QMainWindow):
         self.messagebox.setIcon(QMessageBox.Information)
         self.messagebox.show()
             
+
 
         
 
