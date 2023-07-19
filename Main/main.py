@@ -1,8 +1,13 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt5.QtGui import QIntValidator
-from PyQt5 import uic,QtWidgets
-import sys, os
+from PyQt5.QtCore import Qt
+from PyQt5 import uic, QtWidgets
+import sys, os, time
 from sub_main import Main
+
+
+
+
 
 
 
@@ -45,17 +50,30 @@ class MainWindow(QMainWindow):
         
 
     def clicked_ok(self):
-        if (self.label_upload.text() and self.label_path_selection.text()) == '':
-            print("No file selected")
+        if(self.label_upload.text() and self.label_path_selection.text()) == '':
+            message = "Please select the CSV file or path to be saved."
+            self.message_handling(message)
             
-            
+        elif(self.le_unique.text() == "" or self.le_unique.text() == "0"):
+            message = "Please enter a column number for unique data."
+            self.message_handling(message)
         
         else:
+            # QApplication.setOverrideCursor(Qt.WaitCursor)
+            # time.sleep(3)
+            # QApplication.restoreOverrideCursor()
             upload_path = self.label_upload.text()
             selected_path = self.label_path_selection.text()
             
             paths = Main(upload_path, selected_path, self.le_unique.text())
             print(paths.dups_remover())
+            
+    def message_handling(self, text):
+        self.messagebox = QMessageBox()
+        self.messagebox.setText(text)
+        self.messagebox.setWindowTitle("Program Message")
+        self.messagebox.setIcon(QMessageBox.Information)
+        self.messagebox.show()
             
 
         
